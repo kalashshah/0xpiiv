@@ -3,8 +3,8 @@
     "type": "object",
     "$metadata": {
       "uris": {
-        "jsonLdContext": "https://raw.githubusercontent.com/kitai-hazure/DTender/main/schema/cin-verification.json-ld",
-        "jsonSchema": "https://raw.githubusercontent.com/kitai-hazure/DTender/main/schema/cin-verification.json"
+        "jsonLdContext": "https://raw.githubusercontent.com/kalashshah/0xpiiv/main/hardhat/schema/piivtoken-verification.json-ld",
+        "jsonSchema": "https://raw.githubusercontent.com/kalashshah/0xpiiv/main/hardhat/schema/piivtoken-verification.json"
       }
     },
     "required": [
