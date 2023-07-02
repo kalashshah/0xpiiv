@@ -1,25 +1,16 @@
 import { ethers } from "hardhat";
+import { deployPiivGovernor } from "./deployments/deploy-piivGovernor";
+import { deployPiivIssuer } from "./deployments/deploy-piivIssuer";
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
-
-  const lockedAmount = ethers.parseEther("0.001");
-
-  const lock = await ethers.deployContract("Lock", [
-    unlockTime,
-    {
-      value: lockedAmount,
-    },
-  ]);
-
-  await lock.waitForDeployment();
-
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
-  );
+  const [deployer] = await ethers.getSigners();
+  const deployerAddress = await deployer.getAddress();
+  console.log("🧪 Starting deployments with address: " + deployerAddress);
+  const { piivGovernorAddress } = await deployPiivGovernor({
+    deployerAddress,
+  });
+  await deployPiivIssuer({ deployerAddress, piivGovernorAddress });
+  console.log("🎉 Deployments completed successfully!");
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "deploy": "hardhat run scripts/deploy.ts --network hardhat",
     "deploy:mumbai": "npx hardhat run scripts/deployGov.ts --network polygon_mumbai",
     "setERC20Request": "npx hardhat run scripts/setERC20AirDropRequest.ts --network polygon_mumbai"
   },

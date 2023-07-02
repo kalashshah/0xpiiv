@@ -6,6 +6,9 @@ dotenv.config();
 export const constants = {
   MAX_SUPPLY: BigInt("1000000000000000000000000"),
   MIN_DELAY: 1800, // 30 minutes
+  SPONGE_POSEIDON_LIB_MUMBAI: "0x12d8C87A61dAa6DD31d8196187cFa37d1C647153",
+  POSEIDON6_LIB_MUMBAI: "0xb588b8f07012Dc958aa90EFc7d3CF943057F17d7",
+  PROPOSAL_DESCRIPTION: "This is a test proposal",
 };
 
 const config: HardhatUserConfig = {

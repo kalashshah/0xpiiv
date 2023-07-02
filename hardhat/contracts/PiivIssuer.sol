@@ -3,13 +3,13 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-error PiivIssuers__InvalidIssuerAddress();
-error PiivIssuers__IssuerAlreadyExists(address issuer);
-error PiivIssuers__IssuerDoesNotExist(address issuer);
-error PiivIssuers__InvalidName();
-error PiivIssuers__InvalidDescription();
-error PiivIssuers__InvalidCid();
-error PiivIssuers__InvalidDid();
+error PiivIssuer__InvalidIssuerAddress();
+error PiivIssuer__IssuerAlreadyExists(address issuer);
+error PiivIssuer__IssuerDoesNotExist(address issuer);
+error PiivIssuer__InvalidName();
+error PiivIssuer__InvalidDescription();
+error PiivIssuer__InvalidCid();
+error PiivIssuer__InvalidDid();
 
 struct IssuerData {
     address issuer;
@@ -19,7 +19,7 @@ struct IssuerData {
     string cid;
 }
 
-contract PiivIssuers is Ownable {
+contract PiivIssuer is Ownable {
     mapping(address => IssuerData) private issuers;
 
     event IssuerAdded(
@@ -40,23 +40,23 @@ contract PiivIssuers is Ownable {
         string memory cid
     ) external onlyOwner {
         if (issuer == address(0)) {
-            revert PiivIssuers__InvalidIssuerAddress();
+            revert PiivIssuer__InvalidIssuerAddress();
         }
 
         if (bytes(name).length == 0) {
-            revert PiivIssuers__InvalidName();
+            revert PiivIssuer__InvalidName();
         }
 
         if (bytes(description).length == 0) {
-            revert PiivIssuers__InvalidDescription();
+            revert PiivIssuer__InvalidDescription();
         }
 
         if (bytes(cid).length == 0) {
-            revert PiivIssuers__InvalidCid();
+            revert PiivIssuer__InvalidCid();
         }
 
         if (bytes(issuers[issuer].did).length != 0) {
-            revert PiivIssuers__IssuerAlreadyExists(issuer);
+            revert PiivIssuer__IssuerAlreadyExists(issuer);
         }
 
         issuers[issuer] = IssuerData({
@@ -72,7 +72,7 @@ contract PiivIssuers is Ownable {
 
     function removeIssuer(address issuer) external onlyOwner {
         if (bytes(issuers[issuer].did).length == 0) {
-            revert PiivIssuers__IssuerDoesNotExist(issuer);
+            revert PiivIssuer__IssuerDoesNotExist(issuer);
         }
 
         delete issuers[issuer];

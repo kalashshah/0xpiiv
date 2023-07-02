@@ -1,7 +1,4 @@
-import {
-  time,
-  loadFixture,
-} from "@nomicfoundation/hardhat-toolbox/network-helpers";
+import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { constants } from "../hardhat.config";
@@ -10,7 +7,12 @@ describe("PiivGovToken", function () {
   async function deployPiivGovTokenFixture() {
     const [deployer, otherAccount] = await ethers.getSigners();
 
-    const PiivGovToken = await ethers.getContractFactory("PiivGovToken");
+    const PiivGovToken = await ethers.getContractFactory("PiivGovToken", {
+      libraries: {
+        SpongePoseidon: constants.SPONGE_POSEIDON_LIB_MUMBAI,
+        PoseidonUnit6L: constants.POSEIDON6_LIB_MUMBAI,
+      },
+    });
     const piivGovToken = await PiivGovToken.deploy();
 
     return { piivGovToken, deployer, otherAccount };

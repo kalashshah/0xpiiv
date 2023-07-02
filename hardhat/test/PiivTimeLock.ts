@@ -8,7 +8,12 @@ describe("PiivTimeLock", function () {
     const [deployer, otherAccount] = await ethers.getSigners();
 
     const PiivTimeLock = await ethers.getContractFactory("PiivTimelock");
-    const piivTimeLock = await PiivTimeLock.deploy(constants.MIN_DELAY, [], []);
+    const piivTimeLock = await PiivTimeLock.deploy(
+      constants.MIN_DELAY,
+      [],
+      [],
+      deployer.address
+    );
 
     return { piivTimeLock, deployer, otherAccount };
   }
