@@ -6,13 +6,13 @@
       "id": "@id",
       "type": "@type",
       "IsEligibleToVote": {
-        "@id": "https://raw.githubusercontent.com/kitai-hazure/DTender/main/schema/cin-verification.json-ld#IsAValidCompany",
+        "@id": "https://raw.githubusercontent.com/kalashshah/0xpiiv/main/hardhat/schema/piivtoken-verification.json-ld#IsEligibleToVote",
         "@context": {
           "@version": 1.1,
           "@protected": true,
           "id": "@id",
           "type": "@type",
-          "vocab": "https://github.com/kitai-hazure/DTender/blob/main/schema/cin-verification.md#",
+          "vocab": "https://github.com/kalashshah/0xpiiv/blob/main/hardhat/schema/piivtoken-verification.md#",
           "xsd": "http://www.w3.org/2001/XMLSchema#",
           "dateOfBirth": {
             "@id": "vocab:dateOfBirth",
