@@ -5,13 +5,12 @@ import { constants } from "../hardhat.config";
 
 describe("PiivTimeLock", function () {
   async function deployPiivTimeLockFixture() {
-    console.log("deployPiivTimeLockFixture");
-    const [owner, otherAccount] = await ethers.getSigners();
+    const [deployer, otherAccount] = await ethers.getSigners();
 
     const PiivTimeLock = await ethers.getContractFactory("PiivTimelock");
     const piivTimeLock = await PiivTimeLock.deploy(constants.MIN_DELAY, [], []);
 
-    return { piivTimeLock, owner, otherAccount };
+    return { piivTimeLock, deployer, otherAccount };
   }
 
   describe("Deployment", function () {

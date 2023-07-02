@@ -8,7 +8,6 @@ import { constants } from "../hardhat.config";
 
 describe("PiivGovToken", function () {
   async function deployPiivGovTokenFixture() {
-    console.log("deployPiivGovTokenFixture");
     const [deployer, otherAccount] = await ethers.getSigners();
 
     const PiivGovToken = await ethers.getContractFactory("PiivGovToken");
