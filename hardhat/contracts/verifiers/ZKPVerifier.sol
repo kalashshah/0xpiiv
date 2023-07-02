@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../lib/GenesisUtils.sol";
 import "../lib/SpongePoseidon.sol";
@@ -29,7 +28,10 @@ contract ZKPVerifier is IZKPVerifier, Ownable {
             requestValidators[requestId] != ICircuitValidator(address(0)),
             "validator is not set for this request id"
         ); // validator exists
-        require(requestQueries[requestId].queryHash != 0, "query is not set for this request id"); // query exists
+        require(
+            requestQueries[requestId].queryHash != 0,
+            "query is not set for this request id"
+        ); // query exists
 
         _beforeProofSubmit(requestId, inputs, requestValidators[requestId]);
 
@@ -71,15 +73,15 @@ contract ZKPVerifier is IZKPVerifier, Ownable {
         );
 
         return
-        setZKPRequestRaw(
-            requestId,
-            validator,
-            schema,
-            claimPathKey,
-            operator,
-            value,
-            queryHash
-        );
+            setZKPRequestRaw(
+                requestId,
+                validator,
+                schema,
+                claimPathKey,
+                operator,
+                value,
+                queryHash
+            );
     }
 
     function setZKPRequestRaw(

@@ -1,3 +1,4 @@
+import React from "react";
 import Image from "next/image";
 import Head from "next/head";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -10,40 +11,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { QRCode } from "react-qr-svg";
+import QRJson from "../qrcodes/eligibility_qrcode.json";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const [dateOfBirth, setDateOfBirth] = React.useState<string | null>(null);
+  const [showQR, setShowQR] = React.useState<boolean>(false);
   const origin =
     typeof window !== "undefined" && window.location.origin
       ? window.location.origin
       : SITE_URL;
-
-  const links = [
-    {
-      title: "Next.js",
-      description:
-        "Seamlessly integrate your decentralized application with Next.js, a popular React-based framework.",
-      href: "https://nextjs.org",
-    },
-    {
-      title: "RainbowKit",
-      description: "A powerful and easy-to-use wallet Ethereum-based dApps.",
-      href: "https://www.rainbowkit.com",
-    },
-    {
-      title: "WAGMI",
-      description:
-        "wagmi is a collection of React Hooks containing everything you need to start working with Ethereum.",
-      href: "https://wagmi.sh",
-    },
-    {
-      title: "Examples",
-      description:
-        "Start by exploring some pre-built examples to inspire your creativity!",
-      href: `${origin}/examples`,
-    },
-  ];
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
@@ -73,48 +52,12 @@ export default function Home() {
           priority
         />
       </div>
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left mt-24 lg:mt-0">
-        {links.map((link, index) => (
-          <Link
-            key={index}
-            href={link.href}
-            className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-            rel="noopener noreferrer"
-          >
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-              {link.title}
-              <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-                -&gt;
-              </span>
-            </h2>
-            <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-              {link.description}
-            </p>
-          </Link>
-        ))}
-      </div>
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
-          <AccordionTrigger>Is it accessible?</AccordionTrigger>
-          <AccordionContent>
-            Yes. It adheres to the WAI-ARIA design pattern.
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-2">
-          <AccordionTrigger>Is it styled?</AccordionTrigger>
-          <AccordionContent>
-            Yes. It comes with default styles that matches the other
-            components&apos; aesthetic.
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-3">
-          <AccordionTrigger>Is it animated?</AccordionTrigger>
-          <AccordionContent>
-            Yes. It&apos;s animated by default, but you can disable it if you
-            prefer.
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+      <button onClick={() => setShowQR(true)}>SHOW QR</button>
+      {showQR && (
+        <div style={{ backgroundColor: "white", padding: 10 }}>
+          <QRCode style={{ width: 256 }} value={JSON.stringify(QRJson)} />
+        </div>
+      )}
     </main>
   );
 }

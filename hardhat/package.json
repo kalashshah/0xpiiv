@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "deploy:mumbai": "npx hardhat run scripts/deployGov.ts --network polygon_mumbai",
+    "setERC20Request": "npx hardhat run scripts/setERC20AirDropRequest.ts --network polygon_mumbai"
+  },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
     "@nomicfoundation/hardhat-ethers": "^3.0.0",

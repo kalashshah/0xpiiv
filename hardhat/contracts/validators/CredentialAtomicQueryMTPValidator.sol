@@ -7,7 +7,10 @@ import "../interfaces/ICircuitValidator.sol";
 import "../interfaces/IVerifier.sol";
 import "../interfaces/IState.sol";
 
-contract CredentialAtomicQueryMTPValidator is OwnableUpgradeable, ICircuitValidator {
+contract CredentialAtomicQueryMTPValidator is
+    OwnableUpgradeable,
+    ICircuitValidator
+{
     string constant CIRCUIT_ID = "credentialAtomicQueryMTPV2OnChain";
     uint256 constant CHALLENGE_INDEX = 4;
 
@@ -26,7 +29,9 @@ contract CredentialAtomicQueryMTPValidator is OwnableUpgradeable, ICircuitValida
         __Ownable_init();
     }
 
-    function setRevocationStateExpirationTime(uint256 expirationTime) public onlyOwner {
+    function setRevocationStateExpirationTime(
+        uint256 expirationTime
+    ) public onlyOwner {
         revocationStateExpirationTime = expirationTime;
     }
 
@@ -46,9 +51,15 @@ contract CredentialAtomicQueryMTPValidator is OwnableUpgradeable, ICircuitValida
         uint256 queryHash
     ) external view returns (bool r) {
         // verify that zkp is valid
-        require(verifier.verifyProof(a, b, c, inputs), "MTP proof is not valid");
+        require(
+            verifier.verifyProof(a, b, c, inputs),
+            "MTP proof is not valid"
+        );
 
-        require(inputs[2] == queryHash, "query hash does not match the requested one");
+        require(
+            inputs[2] == queryHash,
+            "query hash does not match the requested one"
+        );
 
         // verify user states
         uint256 gistRoot = inputs[5];
@@ -56,21 +67,30 @@ contract CredentialAtomicQueryMTPValidator is OwnableUpgradeable, ICircuitValida
         uint256 issuerClaimIdenState = inputs[7];
         uint256 issuerClaimNonRevState = inputs[9];
 
-        IState.RootInfo memory rootInfo = state.getGISTRootInfo(gistRoot);
+        IState.GistRootInfo memory rootInfo = state.getGISTRootInfo(gistRoot);
 
-        require(rootInfo.root == gistRoot, "Gist root state isn't in state contract");
+        require(
+            rootInfo.root == gistRoot,
+            "Gist root state isn't in state contract"
+        );
 
         // 2. Issuer state must be registered in state contracts or be genesis
-        bool isIssuerStateGenesis = GenesisUtils.isGenesisState(issuerId, issuerClaimIdenState);
+        bool isIssuerStateGenesis = GenesisUtils.isGenesisState(
+            issuerId,
+            issuerClaimIdenState
+        );
 
         if (!isIssuerStateGenesis) {
-            IState.StateInfo memory issuerStateInfo = state.getStateInfoByState(
-                issuerClaimIdenState
+            IState.StateInfo memory issuerStateInfo = state
+                .getStateInfoByIdAndState(issuerId, issuerClaimIdenState);
+            require(
+                issuerId == issuerStateInfo.id,
+                "Issuer state doesn't exist in state contract"
             );
-            require(issuerId == issuerStateInfo.id, "Issuer state doesn't exist in state contract");
         }
 
-        IState.StateInfo memory issuerClaimNonRevStateInfo = state.getStateInfoById(issuerId);
+        IState.StateInfo memory issuerClaimNonRevStateInfo = state
+            .getStateInfoById(issuerId);
 
         if (issuerClaimNonRevStateInfo.state == 0) {
             require(
@@ -80,9 +100,9 @@ contract CredentialAtomicQueryMTPValidator is OwnableUpgradeable, ICircuitValida
         } else {
             // The non-empty state is returned, and it's not equal to the state that the user has provided.
             if (issuerClaimNonRevStateInfo.state != issuerClaimNonRevState) {
-                // Get the time of the latest state and compare it to the transition time of state provided by the user.
+                // Get  the time of the latest state and compare it to the transition time of state provided by the user.
                 IState.StateInfo memory issuerClaimNonRevLatestStateInfo = state
-                    .getStateInfoByState(issuerClaimNonRevState);
+                    .getStateInfoByIdAndState(issuerId, issuerClaimNonRevState);
 
                 if (
                     issuerClaimNonRevLatestStateInfo.id == 0 ||
@@ -92,11 +112,14 @@ contract CredentialAtomicQueryMTPValidator is OwnableUpgradeable, ICircuitValida
                 }
 
                 if (issuerClaimNonRevLatestStateInfo.replacedAtTimestamp == 0) {
-                    revert("Non-Latest state doesn't contain replacement information");
+                    revert(
+                        "Non-Latest state doesn't contain replacement information"
+                    );
                 }
 
                 if (
-                    block.timestamp - issuerClaimNonRevLatestStateInfo.replacedAtTimestamp >
+                    block.timestamp -
+                        issuerClaimNonRevLatestStateInfo.replacedAtTimestamp >
                     revocationStateExpirationTime
                 ) {
                     revert("Non-Revocation state of Issuer expired");
